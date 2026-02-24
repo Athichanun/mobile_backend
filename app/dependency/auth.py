@@ -4,9 +4,9 @@ from jose import JWTError, jwt
 from datetime import datetime, timedelta
 from passlib.context import CryptContext
 from sqlalchemy.orm import Session
-from .database import get_db
-from .models import User
-from app import models, schemas
+from app.dependency.database import get_db
+from app.models.users import User
+from app.schemas.users import UserLogin
 # 1. การตั้งค่าพื้นฐาน (ในสเกลใหญ่ควรอยู่ใน .env)
 SECRET_KEY = "super-secret-key-for-mobile-app"
 ALGORITHM = "HS256"
@@ -47,7 +47,7 @@ def get_current_user(token: str = Depends(oauth2_scheme)):
 # --- API Routes ---
 
 @router.post("/login")
-async def login(user_data: schemas.UserLogin, db: Session = Depends(get_db)):
+async def login(user_data: UserLogin, db: Session = Depends(get_db)):
     # ดึง User จาก Database จริงๆ
     user = db.query(models.User).filter(models.User.username == user_data.username).first()
     
