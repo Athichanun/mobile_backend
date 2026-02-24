@@ -4,6 +4,9 @@ from pydantic import BaseModel
 class UserCreate(BaseModel):
     username: str
     password: str
+    email: str
+    phone: str
+    image: str
 
 # สำหรับรับข้อมูลตอนล็อกอิน
 class UserLogin(BaseModel):

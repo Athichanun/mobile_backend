@@ -38,9 +38,10 @@ def get_current_user(token: str = Depends(oauth2_scheme)):
     try:
         payload = jwt.decode(token, SECRET_KEY, algorithms=[ALGORITHM])
         username: str = payload.get("sub")
+        user_id: int = payload.get("id")
         if username is None:
             raise credentials_exception
-        return username # ส่งชื่อ User กลับไป
+        return username, user_id # ส่งชื่อ User กลับไป
     except JWTError:
         raise credentials_exception
 
@@ -49,12 +50,15 @@ def get_current_user(token: str = Depends(oauth2_scheme)):
 @router.post("/login")
 async def login(user_data: UserLogin, db: Session = Depends(get_db)):
     # ดึง User จาก Database จริงๆ
-    user = db.query(models.User).filter(models.User.username == user_data.username).first()
+    user = db.query(User).filter(User.username == user_data.username).first()
     
     # เช็คว่ามี User ไหม และรหัสผ่านที่ Hash ไว้ตรงกันไหม
     if not user or not pwd_context.verify(user_data.password, user.hashed_password):
         raise HTTPException(status_code=401, detail="ชื่อผู้ใช้หรือรหัสผ่านไม่ถูกต้อง")
     
     # สร้าง Token
-    access_token = create_access_token(data={"sub": user.username})
+    access_token = create_access_token(data={
+    "sub": user.username,
+    "id": user.id
+    })
     return {"access_token": access_token, "token_type": "bearer"}
