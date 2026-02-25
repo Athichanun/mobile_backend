@@ -35,3 +35,7 @@ class UserService:
     @staticmethod
     def get_user_by_id(user_id: int):
         return UserRepository.get_by_id(user_id)
+    
+    @staticmethod
+    def delete_user_by_id(user_id: int):
+        return UserRepository.delete_user(user_id)
