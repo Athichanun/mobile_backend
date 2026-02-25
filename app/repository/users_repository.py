@@ -23,13 +23,31 @@ class UserRepository:
             return None
 
     @staticmethod
-    def update_user(user_id: int, username: str, email: str, phone: str, image: str, hashed_password: str):
+    def update_user(user_id: int, **fields):
         with engine.begin() as conn:
+            set_clauses = []
+            values = {"id": user_id}
+
+            for key, value in fields.items():
+                if value is not None:
+                    set_clauses.append(f"{key} = :{key}")
+                    values[key] = value
+
+            if not set_clauses:
+                return None  # ไม่มีอะไรให้ update
+
             query = text(
-                "UPDATE users SET username = :username, email = :email, phone = :phone, image = :image, hashed_password = :hashed_password WHERE id = :id RETURNING id, username"
+                f"""
+                UPDATE users
+                SET {", ".join(set_clauses)}
+                WHERE id = :id
+                RETURNING id, username
+                """
             )
-            result = conn.execute(query, {"username": username, "email": email, "phone": phone, "image": image, "hashed_password": hashed_password, "id": user_id})
-            return dict(result.fetchone())
+
+            result = conn.execute(query, values)
+            row = result.fetchone()
+            return dict(row._mapping) if row else None
 
     @staticmethod
     def delete_user(user_id: int):

@@ -39,3 +39,7 @@ class UserService:
     @staticmethod
     def delete_user_by_id(user_id: int):
         return UserRepository.delete_user(user_id)
+
+    @staticmethod
+    def update_user_by_id(user_id: int, **fields):
+        return UserRepository.update_user(user_id, **fields)

@@ -1,5 +1,5 @@
 from pydantic import BaseModel
-
+from typing import Optional
 # สำหรับรับข้อมูลตอนสมัคร
 class UserCreate(BaseModel):
     username: str
@@ -20,3 +20,11 @@ class UserResponse(BaseModel):
 
     class Config:
         from_attributes = True
+
+
+class UserUpdate(BaseModel):
+    username: Optional[str] = None
+    email: Optional[str] = None
+    phone: Optional[str] = None
+    image: Optional[str] = None
+    hashed_password: Optional[str] = None
