@@ -15,10 +15,11 @@ class UserRepository:
     @staticmethod
     def get_by_id(user_id: int):
         with engine.connect() as conn:
-            query = text("SELECT id, username, hashed_password FROM users WHERE id = :id")
+            query = text("SELECT id, username, email, phone, image FROM users WHERE id = :id")
             result = conn.execute(query, {"id": user_id}).fetchone()
+            print("RAW RESULT:", result)
             if result:
-                return dict(result)
+                return dict(result._mapping)   # 👈 สำคัญมาก
             return None
 
     @staticmethod

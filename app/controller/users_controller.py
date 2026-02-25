@@ -19,3 +19,11 @@ def register_user(user: UserCreate, db: Session = Depends(get_db)):
         phone=user.phone,
         image=user.image
     )
+
+@router.get("/{user_id}")
+def get_user_by_id(user_id: int, db: Session = Depends(get_db)):
+    return UserService.get_user_by_id(user_id)
+
+@router.delete("/{user_id}")
+def delete_user_by_id(user_id: int, db: Session = Depends(get_db)):
+    return UserService.delete_user_by_id(user_id)
