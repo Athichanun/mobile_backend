@@ -10,3 +10,5 @@ class User(Base):
     phone = Column(String, unique=True, index=True)
     image = Column(Text)  # <-- เปลี่ยนจาก String เป็น Text
     hashed_password = Column(String)
+
+    
