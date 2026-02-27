@@ -1,4 +1,6 @@
 from sqlalchemy import Column, Integer, String, Text
+from sqlalchemy.orm import relationship
+
 from app.dependency.database import Base
 
 class User(Base):
@@ -10,5 +12,8 @@ class User(Base):
     phone = Column(String, unique=True, index=True)
     image = Column(Text)  # <-- เปลี่ยนจาก String เป็น Text
     hashed_password = Column(String)
+
+    accounts = relationship("Account", back_populates="user")
+
 
     

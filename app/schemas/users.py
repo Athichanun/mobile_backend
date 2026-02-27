@@ -1,5 +1,7 @@
 from pydantic import BaseModel
-from typing import Optional
+from typing import Optional, List
+from app.schemas.accounts import AccountResponse
+
 # สำหรับรับข้อมูลตอนสมัคร
 class UserCreate(BaseModel):
     username: str
@@ -17,6 +19,8 @@ class UserLogin(BaseModel):
 class UserResponse(BaseModel):
     id: int
     username: str
+    accounts: List[AccountResponse] = []
+
 
     class Config:
         from_attributes = True
