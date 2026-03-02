@@ -5,6 +5,7 @@ from app.controller.users_controller import router as users_router
 from app.dependency.database import engine, Base
 from app.models.users import User
 from app.models.accounts import Account
+from app.models.transaction import Transaction
 
 from app.controller.transaction_controller import router as transaction_router
 from app.controller.accounts_controller import router as accounts_router
