@@ -14,6 +14,7 @@ class Transaction(Base):
     name = Column(String, index=True)
     transaction_type = Column(String, index=True)  # income / expense
     amount = Column(Float, nullable=False)
+    price = Column(Float, nullable=False)
     date = Column(Date)
 
     # Many Transactions → 1 Account

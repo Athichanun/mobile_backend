@@ -1,4 +1,6 @@
 from fastapi import FastAPI, Depends
+from fastapi.staticfiles import StaticFiles
+
 from app.dependency.auth import router as auth_router
 from app.dependency.auth import get_current_user
 from app.controller.users_controller import router as users_router
@@ -15,11 +17,12 @@ Base.metadata.create_all(bind=engine)
 
 app = FastAPI()
 
+app.mount("/static", StaticFiles(directory="app/static"), name="static")
+
 app.include_router(auth_router)
 app.include_router(users_router)
 app.include_router(transaction_router)
 app.include_router(accounts_router)
-
 
 
 @app.get("/")
