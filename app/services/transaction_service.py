@@ -1,12 +1,12 @@
-import requests
 import os
 from dotenv import load_dotenv
+import requests
 
 load_dotenv()
 TYPHOON_API = os.getenv("TYPHOON_API")
 
 
-class LLM:
+class TransactionService:
     @staticmethod
-    def call_llm():
-        return TYPHOON_API
+    def decision_transaction(account_id: int, prompt: str):
+        pass
