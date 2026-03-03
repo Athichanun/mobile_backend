@@ -13,3 +13,13 @@ def chat(payload: TransactionInput):
 @router.post("/ocr")
 async def ocr_transaction(account_id: int = Form(...), file: UploadFile = File(...)):
     return TransactionService.ocr_transaction(account_id, file)
+
+
+@router.get("/account/{account_id}")
+def get_transactions_by_account_id(account_id: int):
+    return TransactionService.get_transactions_by_account_id(account_id)
+
+
+@router.get("/user/{user_id}")
+def get_all_transaction_by_user_id(user_id: int):
+    return TransactionService.get_all_transaction_by_user_id(user_id)

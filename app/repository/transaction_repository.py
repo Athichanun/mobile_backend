@@ -50,3 +50,21 @@ class TransactionRepository:
         with engine.connect() as conn:
             result = conn.execute(text(sql_query))
             return [dict(row._mapping) for row in result.fetchall()]
+
+    @staticmethod
+    def get_transactions_by_account_id(account_id: int):
+        with engine.connect() as conn:
+            query = text(
+                "SELECT id, account_id, name, transaction_type, amount, price, date FROM transactions WHERE account_id = :account_id"
+            )
+            result = conn.execute(query, {"account_id": account_id}).fetchall()
+            return [dict(row._mapping) for row in result]
+
+    @staticmethod
+    def get_all_transaction_by_user_id(user_id: int):
+        with engine.connect() as conn:
+            query = text(
+                "SELECT t.id, t.name, t.transaction_type, t.amount, t.price, t.date FROM accounts a INNER JOIN transactions t ON a.id = t.account_id WHERE a.user_id = :user_id"
+            )
+            result = conn.execute(query, {"user_id": user_id}).fetchall()
+            return [dict(row._mapping) for row in result]

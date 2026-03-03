@@ -266,3 +266,11 @@ Return JSON only:
                 }
         except Exception as e:
             return {"error": f"An error occurred during OCR: {str(e)}"}
+
+    @staticmethod
+    def get_transactions_by_account_id(account_id: int):
+        return TransactionRepository.get_transactions_by_account_id(account_id)
+
+    @staticmethod
+    def get_all_transaction_by_user_id(user_id: int):
+        return TransactionRepository.get_all_transaction_by_user_id(user_id)
