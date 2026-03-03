@@ -1,6 +1,7 @@
 from fastapi import APIRouter, Depends, status, File, UploadFile, Form
 from app.schemas.transaction import TransactionInput
 from app.services.transaction_service import TransactionService
+from app.dependency.auth import get_current_user
 
 router = APIRouter(prefix="/transaction", tags=["Transaction"])
 
@@ -20,6 +21,7 @@ def get_transactions_by_account_id(account_id: int):
     return TransactionService.get_transactions_by_account_id(account_id)
 
 
-@router.get("/user/{user_id}")
-def get_all_transaction_by_user_id(user_id: int):
+@router.get("/user")
+def get_all_transaction_by_user_id(current_user: tuple = Depends(get_current_user)):
+    username, user_id = current_user
     return TransactionService.get_all_transaction_by_user_id(user_id)
