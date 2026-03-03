@@ -1,5 +1,6 @@
 from sqlalchemy import text
 from app.dependency.database import engine
+from app.repository.accounts_repository import AccountRepository
 
 
 class TransactionRepository:
@@ -30,6 +31,14 @@ class TransactionRepository:
             row = result.fetchone()
             if row is None:
                 return None
+
+            # Update account balance
+            total_price = float(amount) * float(price)
+            balance_change = (
+                total_price if transaction_type == "income" else -total_price
+            )
+            AccountRepository.update_account_balance(account_id, balance_change)
+
             return dict(row._mapping)
 
     @staticmethod
