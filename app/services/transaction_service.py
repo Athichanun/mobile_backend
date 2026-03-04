@@ -274,3 +274,5 @@ Return JSON only:
     @staticmethod
     def get_all_transaction_by_user_id(user_id: int):
         return TransactionRepository.get_all_transaction_by_user_id(user_id)
+    
+    
