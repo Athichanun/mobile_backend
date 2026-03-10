@@ -8,6 +8,7 @@ from app.repository.transaction_repository import TransactionRepository
 from openai import OpenAI
 import requests
 from fastapi import UploadFile
+from datetime import datetime, timedelta
 
 # Set matplotlib to non-interactive mode
 plt.switch_backend("Agg")
@@ -24,8 +25,12 @@ class TransactionService:
             api_key=TYPHOON_API_KEY,
             base_url=TYPHOON_API_URL,
         )
+        today = datetime.now()
+        yesterday = (today - timedelta(days=1)).strftime("%Y-%m-%d")
+        today = today.strftime("%Y-%m-%d")
         system_prompt = """
 You are a finance AI assistant for a mobile app. 
+if you didn't know the date, use today's date. if the user said yesterday, use {yesterday}. but if the user said today or, use {today}. 
 Database Schema:
 - Table `accounts`: id (INT), user_id (INT), account_name (VARCHAR), balance (FLOAT)
 - Table `transactions`: id (INT), account_id (INT, FK), name (VARCHAR), transaction_type (VARCHAR: 'income'/'expense'), amount (FLOAT), price (FLOAT), date (DATE)
@@ -58,7 +63,7 @@ Return JSON only:
   "visualize": true | false,
   "graph_type": "bar" | "pie" | "line"
 }}
-        """.format(account_id=account_id)
+        """.format(account_id=account_id, yesterday=yesterday, today=today)
 
         response = client.chat.completions.create(
             model="typhoon-v2.5-30b-a3b-instruct",
@@ -274,5 +279,3 @@ Return JSON only:
     @staticmethod
     def get_all_transaction_by_user_id(user_id: int):
         return TransactionRepository.get_all_transaction_by_user_id(user_id)
-    
-    
